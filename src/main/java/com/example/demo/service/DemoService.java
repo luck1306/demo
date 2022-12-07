@@ -5,6 +5,8 @@ import com.example.demo.controller.dto.response.SourceListResponse;
 import com.example.demo.entity.Source;
 import com.example.demo.entity.repository.SourceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,8 @@ public class DemoService {
 
     private final SourceRepository repository;
 
-    public SourceListResponse get() {
-        List<Source> sourceList = repository.findAll();
+    public SourceListResponse get(Pageable page) {
+        Page<Source> sourceList = repository.findAll(page);
         long totalLength = repository.count();
         return SourceListResponse.builder()
                 .sourceList(sourceList)
