@@ -9,3 +9,8 @@ spring:
     password: ${PASSWORD}
     url: ${URL}
     username: ${USERNAME}
+jwt:
+  secret-key: ${SECRET}
+  exp:
+    access: ${ACCESS_EXP}
+    refresh: ${REFRESH_EXP}
