@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class DemoService {
@@ -29,7 +27,7 @@ public class DemoService {
     public Source getDetail(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("존재하지 않는 아이디 입니다.");
+                    throw new RuntimeException("not exist id (DemoService:32)");
                 });
     }
 
