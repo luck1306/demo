@@ -24,14 +24,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = provider.parsingRequest(request);
-        Claims claim = provider.parseToken(token);
-        boolean b = repository.findByAccountId(claim.getSubject())
-                .isPresent();
+        if(token != null) {
+            Claims claim = provider.parseToken(token);
+            boolean b = repository.findByAccountId(claim.getSubject())
+                    .isPresent();
 
-        if(b) {
-            Authentication savingInfo = provider.generateAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(savingInfo);
-
+            if (b) {
+                Authentication savingInfo = provider.generateAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(savingInfo);
+            }
         }
 
         filterChain.doFilter(request, response);
