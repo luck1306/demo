@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "VARCHAR(255) default 'Hello'")
+    @Column(nullable = false)
     private String introduce;
 
     @Builder

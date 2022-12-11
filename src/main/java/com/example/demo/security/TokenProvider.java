@@ -35,7 +35,7 @@ public class TokenProvider {
         return Base64.getEncoder().encodeToString(secret.getBytes(StandardCharsets.UTF_8)).getBytes();
     }
 
-    public String parsingRequest(HttpServletRequest req) {
+    public String parsingRequest(HttpServletRequest req) { // parse request to token
         String token = req.getHeader("Authorization");
         if(token != null && token.startsWith("Bearer ")) {
             return token.substring(7);
@@ -43,22 +43,22 @@ public class TokenProvider {
         return null;
     }
 
-    public Claims parseToken(String token) {
+    public Claims parseToken(String token) { // token parsing
         return Jwts.parserBuilder().setSigningKey(encodingKey()).build().parseClaimsJws(token).getBody();
     }
 
-    public Authentication generateAuthentication(String token) {
+    public Authentication generateAuthentication(String token) { // in this project, when you request with token (in order to set token's user)
         Claims claims = parseToken(token);
         Details principle = detailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(principle, "");
     }
 
-    public String accessToken() {
-        return generateToken("", "access");
+    public String accessToken(String subject) {
+        return generateToken(subject, "access");
     }
 
-    public String refreshToken() {
-        return generateToken("", "refresh");
+    public String refreshToken(String subject) {
+        return generateToken(subject, "refresh");
     }
 
     public String generateToken(String subject, String type) {
