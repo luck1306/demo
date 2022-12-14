@@ -5,8 +5,12 @@ import com.example.demo.controller.dto.request.SignUpRequest;
 import com.example.demo.controller.dto.response.TokenResponse;
 import com.example.demo.entity.User;
 import com.example.demo.entity.repository.UserRepository;
+import com.example.demo.redis.entity.Refresh;
+import com.example.demo.redis.entity.RefreshRepository;
 import com.example.demo.security.TokenProvider;
+import com.example.demo.security.details.Details;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RefreshRepository refreshRepository;
 
     public void signUp(SignUpRequest request) {
         boolean b = userRepository.findByAccountId(request.getAccountId()).isPresent();
@@ -45,5 +51,17 @@ public class AuthService {
                     .build();
         }
         throw new RuntimeException("password does not match");
+    }
+
+    public void logout() {
+        Details details = (Details) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName = details.getUsername();
+        Long id = userRepository.findByAccountId(userName)
+                .orElseThrow(()->{
+                    throw new RuntimeException("this user cannot find");
+                }).getId();
+        Refresh refresh = refreshRepository.findById(id)
+                .orElseThrow(RuntimeException::new);
+        refreshRepository.delete(refresh);
     }
 }

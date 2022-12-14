@@ -1,5 +1,8 @@
 package com.example.demo.security;
 
+import com.example.demo.entity.repository.UserRepository;
+import com.example.demo.redis.entity.Refresh;
+import com.example.demo.redis.entity.RefreshRepository;
 import com.example.demo.security.details.Details;
 import com.example.demo.security.details.DetailsService;
 import io.jsonwebtoken.Claims;
@@ -29,7 +32,11 @@ public class TokenProvider {
     @Value("${jwt.exp.refresh}")
     private Long refreshExp;
 
+    private final UserRepository userRepository;
+
     private final DetailsService detailsService;
+
+    private final RefreshRepository refreshRepository;
 
     private byte[] encodingKey() {
         return Base64.getEncoder().encodeToString(secret.getBytes(StandardCharsets.UTF_8)).getBytes();
@@ -58,7 +65,15 @@ public class TokenProvider {
     }
 
     public String refreshToken(String subject) {
-        return generateToken(subject, "refresh");
+        String token = generateToken(subject, "refresh");
+        Long id = userRepository.findByAccountId(subject)
+                        .orElseThrow(RuntimeException::new).getId();
+        refreshRepository.save(Refresh.builder()
+                        .id(id)
+                        .token(token)
+                        .exp(System.currentTimeMillis() + refreshExp)
+                .build());
+        return token;
     }
 
     public String generateToken(String subject, String type) {
