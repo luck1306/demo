@@ -9,6 +9,11 @@ spring:
     password: ${PASSWORD}
     url: ${URL}
     username: ${USERNAME}
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
 jwt:
   secret-key: ${SECRET}
   exp:
