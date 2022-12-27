@@ -62,6 +62,6 @@ public class AuthService {
                 }).getId();
         Refresh refresh = refreshRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
-        refreshRepository.delete(refresh);
+        if (refresh != null) refreshRepository.delete(refresh);
     }
 }
