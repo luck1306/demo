@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @Cacheable(value = "data")
+//    @Cacheable(value = "data")
     @GetMapping
     public String get(@RequestParam(value = "id") String id) {
         return id;
@@ -39,4 +38,12 @@ public class TestController {
     public void gram() {
         log.info("success");
     }
+
+//    @GetMapping
+//    public String testBean(@RequestParam(name = "n") Integer n, @RequestParam(name = "string") String string) throws InterruptedException {
+//        log.info("number : {} string : {} service start", n, string);
+//        Thread.sleep(3000);
+//        log.info("number : {} string : {} service end", n, string);
+//        return "ok";
+//    }
 }

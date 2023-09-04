@@ -4,6 +4,8 @@ import com.example.demo.controller.dto.request.PostRequest;
 import com.example.demo.controller.dto.response.SourceListResponse;
 import com.example.demo.entity.Source;
 import com.example.demo.entity.repository.SourceRepository;
+import com.example.demo.error.exception.SourceNotFoundException;
+import com.example.demo.error.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,13 +27,14 @@ public class DemoService {
     }
 
     public Source getDetail(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> {
-                    throw new RuntimeException("not exist id (DemoService:32)");
-                });
+        return repository.findById(id).orElseThrow(() -> SourceNotFoundException.EXCEPTION);
     }
 
     public void post(PostRequest postRequest) {
         repository.save(postRequest.toSource(repository));
+    }
+
+    public void asf() {
+        throw UserNotFoundException.EXCEPTION;
     }
 }

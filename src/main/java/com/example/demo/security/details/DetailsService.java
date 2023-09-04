@@ -16,9 +16,7 @@ public class DetailsService implements UserDetailsService {
     @Override
     public Details loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByAccountId(username)
-                .orElseThrow(() -> {
-                    throw new RuntimeException("not exist username information (DetailsService:21)");
-                });
+                .orElseThrow(() -> new RuntimeException("not exist username information (DetailsService:21)"));
         return new Details(user);
     }
 }
